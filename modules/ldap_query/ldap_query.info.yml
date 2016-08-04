@@ -1,0 +1,5 @@
+name: Query
+type: module
+description: LDAP query.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

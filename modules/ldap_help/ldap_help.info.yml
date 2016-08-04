@@ -1,0 +1,5 @@
+name: Help
+type: module
+description: LDAP Help.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

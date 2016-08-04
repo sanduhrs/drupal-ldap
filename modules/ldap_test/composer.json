@@ -1,0 +1,14 @@
+{
+  "name": "drupal/ldap_test",
+  "type": "drupal-module",
+  "description": "LDAP Test.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/ldap_test",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/ldap_test",
+    "source": "http://cgit.drupalcode.org/ldap_test"
+  },
+  "require": { }
+}

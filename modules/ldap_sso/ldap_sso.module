@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains ldap_sso.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ldap_sso_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ldap_sso module.
+    case 'help.page.ldap_sso':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The LDAP SSO.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

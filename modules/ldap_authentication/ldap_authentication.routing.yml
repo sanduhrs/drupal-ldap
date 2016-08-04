@@ -1,0 +1,7 @@
+ldap_authentication.admin_form:
+  path: '/admin/config/people/ldap/authentication'
+  defaults:
+    _title: 'LDAP Authentication'
+    _form: '\Drupal\ldap_authentication\Form\AdminForm'
+  requirements:
+    _permission: 'administer site configuration'

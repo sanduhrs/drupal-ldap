@@ -1,0 +1,7 @@
+# LDAP Server menu items definition
+ldap.settings:
+  title: 'LDAP Settings'
+  route_name: ldap.settings
+  description: 'Configure the LDAP settings.'
+  parent: user.admin_index
+  weight: 99

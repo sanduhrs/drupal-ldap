@@ -1,0 +1,5 @@
+name: LDAP
+type: module
+description: Lightweight Directory Access Protocol (LDAP)
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

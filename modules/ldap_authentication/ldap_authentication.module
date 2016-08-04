@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Contains ldap_authentication.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ldap_authentication_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ldap_authentication module.
+    case 'help.page.ldap_authentication':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The LDAP authentication.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function ldap_authentication_user_login($account) {
+}

@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Contains ldap.install.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function ldap_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'install') {
+    $requirements['ldap_extension_loaded']['title'] = t('LDAP Extension Loaded');
+    if (extension_loaded('ldap')) {
+      $requirements['ldap_extension_loaded']['severity'] = REQUIREMENT_OK;
+    }
+    else {
+      $requirements['ldap_extension_loaded']['severity'] = REQUIREMENT_ERROR;
+      $requirements['ldap_extension_loaded']['description'] = t('No LDAP PHP Extension is loaded for PHP, so LDAP will not work properly.');
+    }
+  }
+
+  if ($phase == 'runtime' && !extension_loaded('ldap')) {
+    $requirements['ldap_extension_loaded']['title'] = t('LDAP Extension Loaded');
+    $requirements['ldap_extension_loaded']['severity'] = REQUIREMENT_ERROR;
+    $requirements['ldap_extension_loaded']['description'] = t('No LDAP PHP Extension is loaded for PHP, so LDAP will not work properly.');
+  }
+
+  return $requirements;
+}

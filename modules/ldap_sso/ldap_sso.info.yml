@@ -1,0 +1,5 @@
+name: Single-Sign-On
+type: module
+description: LDAP SSO.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

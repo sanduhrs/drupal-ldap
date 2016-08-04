@@ -1,0 +1,5 @@
+name: Authorization
+type: module
+description: LDAP Authorization.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

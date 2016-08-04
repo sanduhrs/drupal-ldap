@@ -1,0 +1,8 @@
+name: Authentication
+type: module
+description: LDAP Authentication.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)
+dependencies:
+  - ldap
+  - ldap_server

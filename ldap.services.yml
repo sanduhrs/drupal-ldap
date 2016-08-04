@@ -1,0 +1,4 @@
+services:
+  ldap.client:
+    class: Drupal\ldap\LdapClient
+    arguments: []

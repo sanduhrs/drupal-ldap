@@ -1,0 +1,5 @@
+name: Views
+type: module
+description: LDAP Views.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

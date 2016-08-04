@@ -1,0 +1,5 @@
+name: User
+type: module
+description: LDAP User.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

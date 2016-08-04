@@ -1,0 +1,5 @@
+name: Test
+type: module
+description: LDAP Test.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

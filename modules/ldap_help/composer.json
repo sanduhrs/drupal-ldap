@@ -1,0 +1,14 @@
+{
+  "name": "drupal/ldap_help",
+  "type": "drupal-module",
+  "description": "LDAP Help.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/ldap_help",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/ldap_help",
+    "source": "http://cgit.drupalcode.org/ldap_help"
+  },
+  "require": { }
+}

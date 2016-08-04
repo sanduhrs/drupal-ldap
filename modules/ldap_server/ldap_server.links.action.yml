@@ -1,0 +1,5 @@
+entity.ldap_server.add_form:
+  route_name: 'entity.ldap_server.add_form'
+  title: 'Add LDAP Server'
+  appears_on:
+    - entity.ldap_server.collection

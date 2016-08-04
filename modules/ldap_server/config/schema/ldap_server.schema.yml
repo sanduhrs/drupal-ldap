@@ -1,0 +1,36 @@
+ldap_server.ldap_server.*:
+  type: config_entity
+  label: 'LDAP Server config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string
+    host:
+      type: string
+      label: 'Host'
+    port:
+      type: integer
+      label: 'Port'
+    ssl:
+      type: boolean
+      label: 'Use SSL'
+    start_tls:
+      type: boolean
+      label: 'Use StartTLS'
+    username:
+      type: string
+      label: 'Username'
+    password:
+      type: string
+      label: 'Password'
+    base_dn:
+      type: string
+      label: 'Base DN'
+    referrals:
+      type: boolean
+      label: 'Follow LDAP Referrals'

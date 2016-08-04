@@ -1,0 +1,14 @@
+{
+  "name": "drupal/ldap_query",
+  "type": "drupal-module",
+  "description": "LDAP query.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/ldap_query",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/ldap_query",
+    "source": "http://cgit.drupalcode.org/ldap_query"
+  },
+  "require": { }
+}

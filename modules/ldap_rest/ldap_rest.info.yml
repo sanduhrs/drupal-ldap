@@ -1,0 +1,5 @@
+name: REST
+type: module
+description: LDAP REST.
+core: 8.x
+package: Lightweight Directory Access Protocol (LDAP)

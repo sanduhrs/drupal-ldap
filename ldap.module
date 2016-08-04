@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * @file
+ * Contains ldap.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+// TODO: Remove require and use a composer based solution.
+require __DIR__ . '/vendor/autoload.php';
+
+/**
+ * Implements hook_help().
+ */
+function ldap_help($route_name, RouteMatchInterface $route_match) {
+  #$server = entity_load('ldap_server', 'openldap');
+
+  /** @var \Drupal\ldap_server\Entity\LdapServer $server */
+  #$server = entity_load('ldap_server', 'active_directory');
+  // dpm($server);$this->ldapClient
+
+  /** @var \Drupal\ldap\LdapClient $ldap */
+  #$ldap = \Drupal::service('ldap.client');
+  #$ldap->setOptions([
+  #  'host' => $server->getHost(),
+  #  'port' => $server->getPort(),
+  #  'useSsl' => $server->getSsl(),
+  #  'username' => $server->getUsername(),
+  #  'password' => $server->getPassword(),
+  #  'bindRequiresDn' => TRUE,
+  #  'baseDn' => $server->getBaseDn(),
+  #  // 'accountDomainName' => 'erdfisch.de',
+  #  // 'accountCanonicalForm' => Ldap::ACCTNAME_FORM_USERNAME,
+  #  'useStartTls' => $server->getStartTls(),
+  #  'optReferrals' => TRUE,
+  #]);
+
+  //$ldap->bind();
+  //dpm($ldap, 'LDAP Server Object');
+
+  //  $account = $ldap->getCanonicalAccountName(
+  //    'sauditor',
+  //    LdapService::ACCTNAME_FORM_DN
+  //  );
+  //  dpm($account, 'Bound LDAP User');
+  //
+  //  $result = $ldap->search(
+  //    '(objectclass=*)',
+  //    'ou=Groups,dc=erdfisch,dc=de',
+  //    LdapService::SEARCH_SCOPE_ONE
+  //  );
+  //  foreach ($result as $item) {
+  //    $groups[] = $item;
+  //  }
+  //  #dpm($groups);
+  //
+  //  $result = $ldap->search(
+  //    '(objectclass=*)',
+  //    'ou=People,dc=erdfisch,dc=de',
+  //    LdapService::SEARCH_SCOPE_ONE
+  //  );
+  //  foreach ($result as $item) {
+  //    $people[] = $item;
+  //  }
+  //  #dpm($people);
+  //
+  //  $result = $ldap->search(
+  //    '(&(objectClass=posixGroup)(memberUid=sauditor))',
+  //    'ou=Groups,dc=erdfisch,dc=de',
+  //    LdapService::SEARCH_SCOPE_ONE
+  //  );
+  //  foreach ($result as $item) {
+  //    $user_groups[] = $item;
+  //  }
+  //  #dpm($user_groups);
+
+  switch ($route_name) {
+    // Main module help for the ldap module.
+    case 'help.page.ldap':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Lightweight Directory Access Protocol (LDAP)') . '</p>';
+      return $output;
+
+    default:
+  }
+}
