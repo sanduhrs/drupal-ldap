@@ -11,5 +11,6 @@
     "source": "http://cgit.drupalcode.org/ldap"
   },
   "require": {
+    "zendframework/zend-ldap": "^2.7"
   }
 }
