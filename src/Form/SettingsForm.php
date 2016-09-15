@@ -10,13 +10,13 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @package Drupal\ldap\Form
  */
-class AdminForm extends FormBase {
+class SettingsForm extends FormBase {
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'ldap_admin_form';
+    return 'ldap_settings_form';
   }
 
   /**
@@ -24,7 +24,7 @@ class AdminForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['none'] = [
-      '#markup' => '// TODO: nothing here',
+      '#markup' => '',
     ];
     return $form;
   }
@@ -33,7 +33,6 @@ class AdminForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
   }
 
 }

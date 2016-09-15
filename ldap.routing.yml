@@ -2,6 +2,6 @@ ldap.settings:
   path: /admin/config/people/ldap
   defaults:
     _title: 'LDAP Settings'
-    _form: \Drupal\ldap\Form\AdminForm
+    _form: \Drupal\ldap\Form\SettingsForm
   requirements:
     _permission: 'administer site configuration'
