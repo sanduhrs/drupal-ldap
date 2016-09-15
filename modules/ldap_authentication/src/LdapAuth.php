@@ -123,7 +123,7 @@ class LdapAuth implements UserAuthInterface {
 
       /** @var \Drupal\ldap\Entity\LdapServer $server */
       foreach ($servers as $server) {
-        $options = [
+        $this->ldapClient->setOptions([
           'host' => $server->getHost(),
           'port' => $server->getPort(),
           'useSsl' => $server->getSsl(),
@@ -133,8 +133,7 @@ class LdapAuth implements UserAuthInterface {
           'baseDn' => $server->getBaseDn(),
           'useStartTls' => $server->getStartTls(),
           'optReferrals' => TRUE,
-        ];
-        $this->ldapClient->setOptions($options);
+        ]);
         try {
           // Check if we can bind the user with given credentials.
           $query = $settings->get('auth_name') . '=' . $username . ',' . $settings->get('base_dn');
