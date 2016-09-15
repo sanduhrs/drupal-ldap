@@ -1,7 +1,0 @@
-# LDAP Server menu items definition
-entity.ldap_server.collection:
-  title: 'Servers'
-  route_name: entity.ldap_server.collection
-  description: 'List LDAP Servers'
-  base_route: ldap.settings
-  weight: 20

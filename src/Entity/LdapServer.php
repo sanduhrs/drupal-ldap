@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ldap_server\Entity;
+namespace Drupal\ldap\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 
@@ -11,14 +11,14 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   id = "ldap_server",
  *   label = @Translation("LDAP Servers"),
  *   handlers = {
- *     "list_builder" = "Drupal\ldap_server\LdapServerListBuilder",
+ *     "list_builder" = "Drupal\ldap\LdapServerListBuilder",
  *     "form" = {
- *       "add" = "Drupal\ldap_server\Form\LdapServerForm",
- *       "edit" = "Drupal\ldap_server\Form\LdapServerForm",
- *       "delete" = "Drupal\ldap_server\Form\LdapServerDeleteForm"
+ *       "add" = "Drupal\ldap\Form\LdapServerForm",
+ *       "edit" = "Drupal\ldap\Form\LdapServerForm",
+ *       "delete" = "Drupal\ldap\Form\LdapServerDeleteForm"
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\ldap_server\LdapServerHtmlRouteProvider",
+ *       "html" = "Drupal\ldap\LdapServerHtmlRouteProvider",
  *     },
  *   },
  *   config_prefix = "ldap_server",
@@ -120,6 +120,7 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
    * Get LDAP Server port.
    *
    * @return string
+   *   The server host.
    */
   public function getHost() {
     return $this->host;
@@ -128,7 +129,8 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
   /**
    * Get LDAP Server status.
    *
-   * @return boolean
+   * @return bool
+   *   The server status.
    */
   public function getPort() {
     return $this->port;
@@ -137,7 +139,8 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
   /**
    * Use SSL for connection.
    *
-   * @return boolean
+   * @return bool
+   *   The use ssl indicator.
    */
   public function getSsl() {
     return $this->ssl;
@@ -146,7 +149,8 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
   /**
    * Use StartTLS for connection.
    *
-   * @return boolean
+   * @return bool
+   *   The use start tls indicator.
    */
   public function getStartTls() {
     return $this->start_tls;
@@ -156,6 +160,7 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
    * Get the bind username.
    *
    * @return string
+   *   The username.
    */
   public function getUsername() {
     return $this->username;
@@ -165,6 +170,7 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
    * Get the bind password.
    *
    * @return string
+   *   The bind password.
    */
   public function getPassword() {
     return $this->password;
@@ -174,6 +180,7 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
    * Get the base dn.
    *
    * @return string
+   *   The base dn.
    */
   public function getBaseDn() {
     return $this->base_dn;
@@ -183,6 +190,7 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
    * Follow referrals.
    *
    * @return bool
+   *   The follow referrals indicator.
    */
   public function getReferrals() {
     return $this->referrals;

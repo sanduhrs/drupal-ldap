@@ -12,7 +12,6 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class AdminForm extends FormBase {
 
-
   /**
    * {@inheritdoc}
    */

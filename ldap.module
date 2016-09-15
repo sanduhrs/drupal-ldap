@@ -6,74 +6,111 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
-
-// TODO: Remove require and use a composer based solution.
-require __DIR__ . '/vendor/autoload.php';
+use Drupal\ldap\LdapClient;
 
 /**
  * Implements hook_help().
  */
 function ldap_help($route_name, RouteMatchInterface $route_match) {
-  #$server = entity_load('ldap_server', 'openldap');
+  return;
 
-  /** @var \Drupal\ldap_server\Entity\LdapServer $server */
+  /** @var \Drupal\ldap\Entity\LdapServer $server */
+  $server = entity_load('ldap_server', 'openldap');
+
+  /** @var \Drupal\ldap\Entity\LdapServer $server */
   #$server = entity_load('ldap_server', 'active_directory');
-  // dpm($server);$this->ldapClient
+  // dpm($server);
 
   /** @var \Drupal\ldap\LdapClient $ldap */
-  #$ldap = \Drupal::service('ldap.client');
-  #$ldap->setOptions([
-  #  'host' => $server->getHost(),
-  #  'port' => $server->getPort(),
-  #  'useSsl' => $server->getSsl(),
-  #  'username' => $server->getUsername(),
-  #  'password' => $server->getPassword(),
+  $ldap = \Drupal::service('ldap.client');
+  #$options = [
+  #  'host' => '192.168.25.83',
+  #  'port' => 389,
+  #  'useSsl' => FALSE,
+  #  'username' => 'cn=admin,dc=erdfisch,dc=de',
+  #  'password' => 'password',
   #  'bindRequiresDn' => TRUE,
-  #  'baseDn' => $server->getBaseDn(),
-  #  // 'accountDomainName' => 'erdfisch.de',
-  #  // 'accountCanonicalForm' => Ldap::ACCTNAME_FORM_USERNAME,
-  #  'useStartTls' => $server->getStartTls(),
+  #  'baseDn' => 'dc=erdfisch,dc=de',
+  #  'useStartTls' => FALSE,
   #  'optReferrals' => TRUE,
-  #]);
+  #];
+  $options = [
+    'host' => $server->getHost(),
+    'port' => $server->getPort(),
+    'useSsl' => $server->getSsl(),
+    'username' => $server->getUsername(),
+    'password' => $server->getPassword(),
+    'bindRequiresDn' => TRUE,
+    'baseDn' => $server->getBaseDn(),
+    // 'accountDomainName' => 'erdfisch.de',
+    // 'accountCanonicalForm' => Ldap::ACCTNAME_FORM_USERNAME,
+    'useStartTls' => $server->getStartTls(),
+    'optReferrals' => TRUE,
+  ];
+  $ldap->setOptions($options);
 
-  //$ldap->bind();
-  //dpm($ldap, 'LDAP Server Object');
+  $ldap->bind('cn=Stefan Auditor,ou=People,dc=erdfisch,dc=de', 'password');
+  dpm($ldap, 'LDAP Server Object');
 
-  //  $account = $ldap->getCanonicalAccountName(
-  //    'sauditor',
-  //    LdapService::ACCTNAME_FORM_DN
-  //  );
-  //  dpm($account, 'Bound LDAP User');
-  //
-  //  $result = $ldap->search(
-  //    '(objectclass=*)',
-  //    'ou=Groups,dc=erdfisch,dc=de',
-  //    LdapService::SEARCH_SCOPE_ONE
-  //  );
-  //  foreach ($result as $item) {
-  //    $groups[] = $item;
-  //  }
-  //  #dpm($groups);
-  //
-  //  $result = $ldap->search(
-  //    '(objectclass=*)',
-  //    'ou=People,dc=erdfisch,dc=de',
-  //    LdapService::SEARCH_SCOPE_ONE
-  //  );
-  //  foreach ($result as $item) {
-  //    $people[] = $item;
-  //  }
-  //  #dpm($people);
-  //
-  //  $result = $ldap->search(
-  //    '(&(objectClass=posixGroup)(memberUid=sauditor))',
-  //    'ou=Groups,dc=erdfisch,dc=de',
-  //    LdapService::SEARCH_SCOPE_ONE
-  //  );
-  //  foreach ($result as $item) {
-  //    $user_groups[] = $item;
-  //  }
-  //  #dpm($user_groups);
+  // Get username
+  $account = $ldap->getCanonicalAccountName(
+    'sauditor',
+    LdapClient::ACCTNAME_FORM_USERNAME
+  );
+  dsm($account, 'LDAP User Name');
+
+  // Get user dn
+  $account = $ldap->getCanonicalAccountName(
+    'sauditor',
+    LdapClient::ACCTNAME_FORM_DN
+  );
+  dsm($account, 'LDAP User DN');
+
+  // Get groups
+  $group_dn = 'ou=Groups,dc=erdfisch,dc=de';
+  $result = $ldap->search(
+    '(objectclass=posixGroup)',
+    $group_dn
+  );
+  foreach ($result as $item) {
+    foreach ($item as $attribute => $value) {
+      if (is_array($value)) {
+        $groups[$item['dn']][$attribute] = implode(',', $value);
+        continue;
+      }
+      $groups[$item['dn']][$attribute] = $value;
+    }
+  }
+  dsm($groups, 'LDAP Groups');
+
+  $result = $ldap->search(
+    '(objectclass=*)',
+    'ou=People,dc=erdfisch,dc=de',
+    LdapClient::SEARCH_SCOPE_ONE
+  );
+  foreach ($result as $item) {
+    foreach ($item as $attribute => $value) {
+      if (is_array($value)) {
+        $people[$item['dn']][$attribute] = implode(',', $value);
+        continue;
+      }
+      $people[$item['dn']][$attribute] = $value;
+    }
+  }
+  dpm($people, 'LDAP People');
+
+  $result = $ldap->getEntry('cn=Stefan Auditor,ou=People,dc=erdfisch,dc=de');
+  dsm($result, 'Person');
+
+  //$result = $ldap->search(
+  //  '(&(objectClass=posixGroup)(memberUid=sauditor))',
+  //  'ou=Groups,dc=erdfisch,dc=de',
+  //  LdapClient::SEARCH_SCOPE_SUB
+  //);
+  //foreach ($result as $item) {
+  //  $user_groups[] = $item;
+  //}
+  //dpm($user_groups);
 
   switch ($route_name) {
     // Main module help for the ldap module.

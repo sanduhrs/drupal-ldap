@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ldap_server\Form;
+namespace Drupal\ldap\Form;
 
 use Drupal\Core\Entity\EntityConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -44,7 +44,7 @@ class LdapServerDeleteForm extends EntityConfirmFormBase {
           '@type' => $this->entity->bundle(),
           '@label' => $this->entity->label(),
         ]
-        )
+      )
     );
 
     $form_state->setRedirectUrl($this->getCancelUrl());

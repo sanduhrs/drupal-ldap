@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ldap_server\Form;
+namespace Drupal\ldap\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Class LdapServerForm.
  *
- * @package Drupal\ldap_server\Form
+ * @package Drupal\ldap\Form
  */
 class LdapServerForm extends EntityForm {
 
@@ -18,7 +18,7 @@ class LdapServerForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    /** @var \Drupal\ldap_server\Entity\LdapServer $ldap_server */
+    /** @var \Drupal\ldap\Entity\LdapServer $ldap_server */
     $ldap_server = $this->entity;
     $form['label'] = array(
       '#type' => 'textfield',
@@ -35,7 +35,7 @@ class LdapServerForm extends EntityForm {
       '#maxlength' => 64,
       '#description' => $this->t('A unique name for this item. It must only contain lowercase letters, numbers, and underscores.'),
       '#machine_name' => array(
-        'exists' => '\Drupal\ldap_server\Entity\LdapServer::load',
+        'exists' => '\Drupal\ldap\Entity\LdapServer::load',
       ),
     );
     $form['host'] = array(
@@ -68,7 +68,7 @@ class LdapServerForm extends EntityForm {
     );
     $form['referrals'] = array(
       '#type' => 'checkbox',
-      '#title' => $this->t('Follow LDAP Referrals '),
+      '#title' => $this->t('Follow LDAP Referrals'),
       '#default_value' => $ldap_server->getReferrals(),
     );
 

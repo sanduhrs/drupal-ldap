@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\ldap_server;
+namespace Drupal\ldap;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Provides a listing of LDAP Server entities.
+ * Provides a listing of LDAP Servers entities.
  */
 class LdapServerListBuilder extends ConfigEntityListBuilder {
 

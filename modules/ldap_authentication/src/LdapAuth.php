@@ -6,12 +6,20 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Password\PasswordInterface;
 use Drupal\ldap\LdapClientInterface;
 use Drupal\user\UserAuthInterface;
-use Drupal\user\Entity\User;
 
 /**
  * Validates user authentication credentials.
  */
 class LdapAuth implements UserAuthInterface {
+
+  // Strictly authenticate with LDAP only.
+  const AUTH_TYPE_STRICT = 0;
+
+  // Authenticate with LDAP first, the try Drupal.
+  const AUTH_TYPE_MIXED = 1;
+
+  // Authenticate with Drupal first, then try LDAP.
+  const AUTH_TYPE_FALLBACK = 2;
 
   /**
    * The entity manager.
@@ -33,6 +41,13 @@ class LdapAuth implements UserAuthInterface {
    * @var \Drupal\ldap\LdapClientInterface;
    */
   protected $ldapClient;
+
+  /**
+   * Drupal\Core\Config\ConfigFactory definition.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $configFactory;
 
   /**
    * The LDAP account entry.
@@ -63,6 +78,13 @@ class LdapAuth implements UserAuthInterface {
   protected $mail;
 
   /**
+   * The user picture.
+   *
+   * @var string
+   */
+  protected $picture;
+
+  /**
    * Constructs a LdapAuth object.
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
@@ -88,73 +110,69 @@ class LdapAuth implements UserAuthInterface {
   public function authenticate($username, $password) {
     $uid = FALSE;
 
+    /** @var \Drupal\externalauth\ExternalAuth $externalauth */
+    $externalauth = $authmap = \Drupal::service('externalauth.externalauth');
+    $settings = \Drupal::config('ldap_authentication.settings');
+
     $this->username = $username;
     $this->password = $password;
 
     if (!empty($username) && strlen($password) > 0) {
-      /** @var \Drupal\ldap_server\Entity\LdapServer $server */
-      $server = entity_load('ldap_server', 'openldap');
+      $servers = \Drupal::entityTypeManager()->getStorage('ldap_server')
+        ->loadMultiple();
 
-      // Check for LDAP account.
-      $this->ldapClient->setServer($server);
-      try {
-        // Bind LDAP account.
-        $this->ldapClient->bind(
-          'cn=' . $username . ',ou=People,dc=erdfisch,dc=de',
-          $password
-        );
-        // Fetch LDAP account.
-        $this->ldapAccount = $this->ldapClient
-          ->getEntry('cn=' . $username . ',ou=people,dc=erdfisch,dc=de');
-        $this->mail = reset($this->ldapAccount['mail']);
-      }
-      catch (\Exception $e) {
-        // Invalid credentials or account does not exist.
-        return FALSE;
-      }
+      /** @var \Drupal\ldap\Entity\LdapServer $server */
+      foreach ($servers as $server) {
+        $options = [
+          'host' => $server->getHost(),
+          'port' => $server->getPort(),
+          'useSsl' => $server->getSsl(),
+          'username' => $server->getUsername(),
+          'password' => $server->getPassword(),
+          'bindRequiresDn' => TRUE,
+          'baseDn' => $server->getBaseDn(),
+          'useStartTls' => $server->getStartTls(),
+          'optReferrals' => TRUE,
+        ];
+        $this->ldapClient->setOptions($options);
+        try {
+          // Check if we can bind the user with given credentials.
+          $query = $settings->get('auth_name') . '=' . $username . ',' . $settings->get('base_dn');
+          $this->ldapClient->bind($query, $password);
 
-      // Check for local account.
-      $account_search = $this->entityManager->getStorage('user')
-        ->loadByProperties(array('name' => $username));
-      if ($account = reset($account_search)) {
-        $uid = $account->id();
-
-        if ($this->passwordChecker->check($password, $account->getPassword())) {
-          // Successful authentication.
-          $uid = $account->id();
-
-          // Update user to new password scheme if needed.
-          if ($this->passwordChecker->needsRehash($account->getPassword())) {
-            $account->setPassword($password);
-            $account->save();
+          // Get the personal data.
+          if ($person = $this->ldapClient->getEntry($query)) {
+            if (isset($person[$settings->get('mail')])) {
+              $this->mail = reset($person[$settings->get('mail')]);
+            }
+            if (isset($person[$settings->get('thumbnail')])) {
+              $this->picture = reset($person[$settings->get('thumbnail')]);
+            }
           }
         }
-      }
+        catch (\Exception $e) {
+          return $uid;
+        }
 
-      // Create local account.
-      if (!$account) {
-        $uid = $this->createUser();
+        // Check for local account.
+        $account = $externalauth->load($query, 'ldap');
+        if ($account) {
+          $account = $externalauth->login($query, 'ldap');
+          return $account->id();
+        }
+
+        // Create local account.
+        if (!$account) {
+          $account = $externalauth->loginRegister($query, 'ldap');
+          $account->setUsername($username);
+          $account->setEmail($this->mail);
+          $account->save();
+          return $account->id();
+        }
       }
     }
 
     return $uid;
-  }
-
-  /**
-   * Create a user.
-   *
-   * @return int
-   *   The user id.
-   */
-  private function createUser() {
-    $user = User::create([
-      'name' => $this->username,
-      'pass' => $this->password,
-      'mail' => $this->mail,
-      'init' => $this->mail,
-    ]);
-    $user->enforceIsNew()->activate()->save();
-    return $user->id();
   }
 
 }

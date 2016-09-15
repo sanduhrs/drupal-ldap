@@ -1,7 +1,12 @@
-# LDAP Server menu items definition
 ldap.settings:
   title: 'LDAP Settings'
   route_name: ldap.settings
   description: 'Configure the LDAP settings.'
   parent: user.admin_index
+  weight: 99
+entity.ldap_server.collection:
+  title: 'LDAP Servers'
+  route_name: entity.ldap_server.collection
+  description: 'List LDAP Servers'
+  parent: ldap.settings
   weight: 99

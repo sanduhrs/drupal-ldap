@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\ldap_server;
+namespace Drupal\ldap;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Symfony\Component\Routing\Route;
 
 /**
- * Provides routes for LDAP Server entities.
+ * Provides routes for LDAP Servers entities.
  *
  * @see Drupal\Core\Entity\Routing\AdminHtmlRouteProvider
  * @see Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider
