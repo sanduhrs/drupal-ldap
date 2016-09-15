@@ -5,3 +5,10 @@ ldap.settings:
     _form: \Drupal\ldap\Form\SettingsForm
   requirements:
     _permission: 'administer site configuration'
+ldap.toggle_status:
+  path: '/admin/config/people/ldap/server/{id}/toggle-status'
+  defaults:
+    _controller: '\Drupal\ldap\Controller\StatusController::toggle'
+  requirements:
+    _csrf_token: 'TRUE'
+    _permission: 'administer site configuration'

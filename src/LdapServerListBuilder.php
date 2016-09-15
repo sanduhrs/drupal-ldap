@@ -4,11 +4,45 @@ namespace Drupal\ldap;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides a listing of LDAP Servers entities.
  */
 class LdapServerListBuilder extends ConfigEntityListBuilder {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOperations(EntityInterface $entity) {
+    $operations = parent::getOperations($entity);
+    $operations['toggle_active'] = array(
+      'title' => $entity->status() ? $this->t('Disable') : $this->t('Enable'),
+      'weight' => 50,
+      'url' => Url::fromRoute(
+        'ldap.toggle_status',
+        [
+          'id' => $entity->id(),
+        ]
+      ),
+    );
+    uasort(
+      $operations,
+      '\Drupal\Component\Utility\SortArray::sortByWeightElement'
+    );
+    return $operations;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildOperations(EntityInterface $entity) {
+    $build = array(
+      '#type' => 'operations',
+      '#links' => $this->getOperations($entity),
+    );
+    return $build;
+  }
 
   /**
    * {@inheritdoc}
