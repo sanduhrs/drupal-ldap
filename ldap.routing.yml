@@ -1,8 +1,7 @@
 ldap.settings:
-  path: /admin/config/people/ldap
+  path: /admin/config/people/ldap/server
   defaults:
     _title: 'LDAP Settings'
-    _form: \Drupal\ldap\Form\SettingsForm
   requirements:
     _permission: 'administer site configuration'
 ldap.toggle_status:

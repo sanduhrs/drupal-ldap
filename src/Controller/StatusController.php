@@ -67,7 +67,7 @@ class StatusController extends ControllerBase {
             'ldap_server' => $server->id(),
           ]
         )->toString(),
-        '@client' => $server->label(),
+        '@server' => $server->label(),
         '%status' => $server->status() ? 'enabled' : 'disabled',
       ]
     ));

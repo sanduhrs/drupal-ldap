@@ -16,21 +16,45 @@ ldap.ldap_server.*:
     port:
       type: integer
       label: 'Port'
-    ssl:
+    use_ssl:
       type: boolean
       label: 'Use SSL'
-    start_tls:
-      type: boolean
-      label: 'Use StartTLS'
     username:
       type: string
       label: 'Username'
     password:
       type: string
       label: 'Password'
+    bind_requires_dn:
+      type: boolean
+      label: 'Bind requires DN'
     base_dn:
       type: string
       label: 'Base DN'
-    referrals:
+    account_canonical_form:
+      type: integer
+      label: 'Account Canonical Form'
+    account_domain_name:
+      type: string
+      label: 'Account Domain Name'
+    account_domain_name_short:
+      type: string
+      label: 'Account Domain Name Short'
+    account_filter_format:
+      type: string
+      label: 'Account Filter Format'
+    allow_empty_password:
+      type: boolean
+      label: 'Allow Empty Password'
+    use_start_tls:
+      type: boolean
+      label: 'Use StartTLS'
+    opt_referrals:
       type: boolean
       label: 'Follow LDAP Referrals'
+    try_username_split:
+      type: boolean
+      label: 'Try Username Split'
+    network_timeout:
+      type: integer
+      label: 'Network Timeout'

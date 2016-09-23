@@ -63,8 +63,8 @@ class LdapServerListBuilder extends ConfigEntityListBuilder {
     $row['label'] = $entity->label();
     $row['id'] = $entity->id();
     $row['status'] = $entity->isActive() ? '✓' : '✕';
-    $row['ssl'] = $entity->getSsl() ? '✓' : '✕';
-    $row['starttls'] = $entity->getStartTls() ? '✓' : '✕';
+    $row['ssl'] = $entity->useSsl() ? '✓' : '✕';
+    $row['starttls'] = $entity->useStartTls() ? '✓' : '✕';
     return $row + parent::buildRow($entity);
   }
 

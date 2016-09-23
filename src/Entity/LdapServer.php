@@ -72,21 +72,7 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
    *
    * @var boolean
    */
-  protected $ssl;
-
-  /**
-   * Use StartTLS for connection.
-   *
-   * @var boolean
-   */
-  protected $start_tls;
-
-  /**
-   * Follow LDAP Referrals .
-   *
-   * @var boolean
-   */
-  protected $referrals;
+  protected $use_ssl;
 
   /**
    * The Bind Username.
@@ -103,6 +89,13 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
   protected $password;
 
   /**
+   * Bind requires DN.
+   *
+   * @var boolean
+   */
+  protected $bind_requires_dn;
+
+  /**
    * The Base DN.
    *
    * @var string
@@ -110,90 +103,199 @@ class LdapServer extends ConfigEntityBase implements LdapServerInterface {
   protected $base_dn;
 
   /**
-   * Get LDAP Server status.
+   * Account Name Canonicalization.
+   *
+   * @var integer
+   */
+  protected $account_canonical_form;
+
+  /**
+   * The Account Domain Name.
+   *
+   * @var string
+   */
+  protected $account_domain_name;
+
+  /**
+   * The Short Account Domain Name.
+   *
+   * @var string
+   */
+  protected $account_domain_name_short;
+
+  /**
+   * The Account Filter Format.
+   *
+   * @var string
+   */
+  protected $account_filter_format;
+
+  /**
+   * Allow empty password.
+   *
+   * @var boolean
+   */
+  protected $allow_empty_password;
+
+  /**
+   * Use StartTLS for connection.
+   *
+   * @var boolean
+   */
+  protected $use_start_tls;
+
+  /**
+   * Follow LDAP Referrals.
+   *
+   * @var boolean
+   */
+  protected $opt_referrals;
+
+  /**
+   * Try username split.
+   *
+   * @var boolean
+   */
+  protected $try_username_split;
+
+  /**
+   * The Network Timeout.
+   *
+   * @var integer
+   */
+  protected $network_timeout;
+
+  /**
+   * @return boolean
    */
   public function isActive() {
     return $this->status;
   }
 
   /**
-   * Get LDAP Server port.
-   *
    * @return string
-   *   The server host.
+   */
+  public function getId() {
+    return $this->id;
+  }
+
+  /**
+   * @return string
+   */
+  public function getLabel() {
+    return $this->label;
+  }
+
+  /**
+   * @return string
    */
   public function getHost() {
     return $this->host;
   }
 
   /**
-   * Get LDAP Server status.
-   *
-   * @return bool
-   *   The server status.
+   * @return int
    */
   public function getPort() {
     return $this->port;
   }
 
   /**
-   * Use SSL for connection.
-   *
-   * @return bool
-   *   The use ssl indicator.
+   * @return boolean
    */
-  public function getSsl() {
-    return $this->ssl;
+  public function useSsl() {
+    return $this->use_ssl;
   }
 
   /**
-   * Use StartTLS for connection.
-   *
-   * @return bool
-   *   The use start tls indicator.
-   */
-  public function getStartTls() {
-    return $this->start_tls;
-  }
-
-  /**
-   * Get the bind username.
-   *
    * @return string
-   *   The username.
    */
   public function getUsername() {
     return $this->username;
   }
 
   /**
-   * Get the bind password.
-   *
    * @return string
-   *   The bind password.
    */
   public function getPassword() {
     return $this->password;
   }
 
   /**
-   * Get the base dn.
-   *
+   * @return boolean
+   */
+  public function bindRequiresDn() {
+    return $this->bind_requires_dn;
+  }
+
+  /**
    * @return string
-   *   The base dn.
    */
   public function getBaseDn() {
     return $this->base_dn;
   }
 
   /**
-   * Follow referrals.
-   *
-   * @return bool
-   *   The follow referrals indicator.
+   * @return int
    */
-  public function getReferrals() {
-    return $this->referrals;
+  public function getAccountCanonicalForm() {
+    return $this->account_canonical_form;
+  }
+
+  /**
+   * @return string
+   */
+  public function getAccountDomainName() {
+    return $this->account_domain_name;
+  }
+
+  /**
+   * @return string
+   */
+  public function getAccountDomainNameShort() {
+    return $this->account_domain_name_short;
+  }
+
+  /**
+   * @return string
+   */
+  public function getAccountFilterFormat() {
+    return $this->account_filter_format;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function allowEmptyPassword() {
+    return $this->allow_empty_password;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function useStartTls() {
+    return $this->use_start_tls;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function useOptReferrals() {
+    return $this->opt_referrals;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function tryUsernameSplit() {
+    return $this->try_username_split;
+  }
+
+  /**
+   * @return int
+   */
+  public function getNetworkTimeout() {
+    return $this->network_timeout;
   }
 
 }
