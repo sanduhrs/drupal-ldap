@@ -16,7 +16,7 @@ class LdapAuthenticationServiceProvider extends ServiceProviderBase {
    */
   public function alter(ContainerBuilder $container) {
     $definition = $container->getDefinition('user.auth');
-    $definition->setClass('Drupal\ldap_authentication\LdapAuth');
+    $definition->setClass('Drupal\ldap_authentication\LdapAuthentication');
     $definition->addArgument(new Reference(('ldap.client')));
   }
 

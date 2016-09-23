@@ -5,10 +5,10 @@ namespace Drupal\ldap_authentication\Form;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\ldap_authentication\LdapAuth;
+use Drupal\ldap_authentication\LdapAuthentication;
 
 /**
- * Class AdminForm.
+ * Class SettingsForm.
  *
  * @package Drupal\ldap_authentication\Form
  */
@@ -18,7 +18,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'ldap_authentication_admin_form';
+    return 'ldap_authentication_settings_form';
   }
 
   /**
@@ -41,12 +41,11 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       '#type' => 'radios',
       '#title' => $this->t('Mode'),
       '#options' => [
-        LdapAuth::AUTH_TYPE_STRICT => 'Strictly authenticate with LDAP only',
-        LdapAuth::AUTH_TYPE_MIXED => 'Authenticate with LDAP first, the try Drupal',
-        LdapAuth::AUTH_TYPE_FALLBACK => 'Authenticate with Drupal first, then try LDAP',
+        LdapAuthentication::AUTH_TYPE_MIXED => $this->t('LDAP authentication with local fallback'),
+        LdapAuthentication::AUTH_TYPE_STRICT => $this->t('Strictly LDAP authentication'),
       ],
       '#default_value' => $settings->get('mode'),
-      '#description' => 'Choose the authentication mode. Modes: <ul><li><em>Mixed Drupal LDAP</em> mode: Try local authentication first, fallback on LDAP.</li><li><em>Mostly LDAP</em> mode: Use LDAP for authentication, exclude user 1</li><li><em>Stricly LDAP</em> mode: Just use LDAP, including user 1.</li></ul>',
+      '#description' => 'Choose the authentication mode.',
     ];
     $form['general']['server']['attributes']['base_dn'] = [
       '#title' => $this->t('Base DN'),

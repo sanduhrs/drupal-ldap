@@ -1,4 +1,4 @@
 services:
-  ldap_authentication.auth:
-    class: 'Drupal\ldap_authentication\LdapAuth'
+  ldap_authentication.authentication:
+    class: 'Drupal\ldap_authentication\LdapAuthentication'
     arguments: ['@entity.manager', '@password', '@ldap.client']

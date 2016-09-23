@@ -1,5 +1,5 @@
-ldap_authentication.admin_form:
-  route_name: 'ldap_authentication.admin_form'
+ldap_authentication.ldap_authentication_settings_form:
   title: 'Authentication'
+  route_name: ldap_authentication.ldap_authentication_settings_form
   weight: 40
   base_route: ldap.settings
