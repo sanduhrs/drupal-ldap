@@ -6,6 +6,8 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Password\PasswordInterface;
 use Drupal\ldap\LdapClientInterface;
 use Drupal\user\UserAuthInterface;
+use Zend\Ldap\Ldap;
+use Zend\Ldap\Dn;
 
 /**
  * Class LdapAuthentication.
@@ -117,74 +119,73 @@ class LdapAuthentication implements UserAuthInterface {
     if (!empty($username) && strlen($password) > 0) {
       $servers = \Drupal::entityTypeManager()->getStorage('ldap_server')
         ->loadByProperties(['status' => 1]);
-      $this->ldapClient->setServers($servers);
+      $server = reset($servers);
+      $this->ldapClient->setServer($server);
 
-      if ($this->ldapClient->bind($username, $password)) {
-        $dn = $this->ldapClient->ldap()->getAccountDn($username);
-        dsm($dn);
-        #$canonical = $this->ldapClient->ldap->getCanonicalAccountName('Stefan Auditor');
-        $acctname = $ldap->getCanonicalAccountName('abaker', Ldap::ACCTNAME_FORM_DN);
-        dsm($canonical);
+      $canonical = Dn::escapeValue($username);
+      if ($auth_name = $settings->get('auth_name')) {
+        $canonical = $this->ldapClient->getCanonicalAccountName(
+          $auth_name . '=' . $canonical . ',' . $settings->get('base_dn'),
+          Ldap::ACCTNAME_FORM_DN
+        );
       }
-        // Check if we can bind the user with given credentials.
-        //$query = $settings->get('auth_name') . '=' . $username . ',' . $settings->get('base_dn');
-        //$this->ldapClient->bind($username, $password);
 
-        // Get the personal data.
-/*        if ($person = $this->ldapClient->getEntry($query)) {
-          if (isset($person[$settings->get('mail')])) {
-            $this->mail = reset($person[$settings->get('mail')]);
-          }
-          if (isset($person[$settings->get('thumbnail')])) {
-            $this->picture = reset($person[$settings->get('thumbnail')]);
-          }
-        }
-
-        // Check for local account with ldap connection.
-        $account = $externalauth->load($query, 'ldap');
-        if ($account) {
-          $account = $externalauth->login($query, 'ldap');
-          return $account->id();
-        }
-
-        // Create local account.
-        if (!$account) {
-          $account = $externalauth->loginRegister($query, 'ldap');
-          $account->setUsername($username);
-          $account->setEmail($this->mail);
-          $account->save();
-          return $account->id();
-        }
-      }*/
-      /*catch (\Exception $e) {
+      // Check if we can bind the user with given credentials.
+      try {
+        $this->ldapClient->bind($canonical, $password);
+      }
+      catch(\Exception $e) {
         // Check for authentication mode.
         $config = \Drupal::config('ldap_authentication.settings');
         if ($config->get('mode') === static::AUTH_TYPE_STRICT) {
           // Stop authenticating when mode is strict.
           return FALSE;
         }
-      }*/
 
-      // Check for authentication mode.
-      $config = \Drupal::config('ldap_authentication.settings');
-      if ($config->get('mode') === static::AUTH_TYPE_STRICT) {
-        // Stop authenticating when mode is strict.
+        // Check for local account without ldap connection.
+        $account_search = \Drupal::entityTypeManager()->getStorage('user')
+          ->loadByProperties(['name' => $username]);
+        // Mostly taken from UserAuth::authenticate().
+        if ($account = reset($account_search)) {
+          if ($this->passwordChecker->check($password,
+            $account->getPassword())
+          ) {
+            // Update user to new password scheme if needed.
+            if ($this->passwordChecker->needsRehash($account->getPassword())) {
+              $account->setPassword($password);
+              $account->save();
+            }
+            return $account->id();
+          }
+        }
         return FALSE;
       }
 
-      // Check for local account without ldap connection.
-      $account_search = \Drupal::entityTypeManager()->getStorage('user')
-        ->loadByProperties(['name' => $username]);
-      // Mostly taken from UserAuth::authenticate().
-      if ($account = reset($account_search)) {
-        if ($this->passwordChecker->check($password, $account->getPassword())) {
-          // Update user to new password scheme if needed.
-          if ($this->passwordChecker->needsRehash($account->getPassword())) {
-            $account->setPassword($password);
-            $account->save();
-          }
-          return $account->id();
+      // Bind was successful, get the personal data.
+      if ($person = $this->ldapClient->getEntry($canonical)) {
+        if (isset($person[$settings->get('mail')])) {
+          $this->mail = reset($person[$settings->get('mail')]);
         }
+        // TODO: Check for thumbnail and store local copy
+        //if (isset($person[$settings->get('thumbnail')])) {
+        //  $this->picture = reset($person[$settings->get('thumbnail')]);
+        //}
+      }
+
+      // Check for local account with ldap connection.
+      $account = $externalauth->load($canonical, 'ldap');
+      if ($account) {
+        $account = $externalauth->login($canonical, 'ldap');
+        return $account->id();
+      }
+
+      // Create local account.
+      if (!$account) {
+        $account = $externalauth->loginRegister($canonical, 'ldap');
+        $account->setUsername($username);
+        $account->setEmail($this->mail);
+        $account->save();
+        return $account->id();
       }
     }
 
