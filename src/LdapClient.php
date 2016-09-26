@@ -30,42 +30,23 @@ class LdapClient extends ZendLdap implements LdapClientInterface {
    */
   public function setServer(LdapServer $server) {
     $this->setOptions([
-      'host'                   => $server->getHost(),
-      'port'                   => $server->getPort(),
-      'useSsl'                 => $server->getSsl(),
-      'username'               => $server->getUsername(),
-      'password'               => $server->getPassword(),
-      // FALSE for Active Directory.
-      'bindRequiresDn'         => TRUE,
-      'baseDn'                 => $server->getBaseDn(),
-      'accountCanonicalForm'   => 1,
-      'accountDomainName'      => NULL,
-      'accountDomainNameShort' => NULL,
-      'accountFilterFormat'    => NULL,
-      'allowEmptyPassword'     => FALSE,
-      'useStartTls'            => $server->getStartTls(),
-      'optReferrals'           => $server->getReferrals(),
-      'tryUsernameSplit'       => TRUE,
-      'networkTimeout'         => NULL,
+      'host' => $server->getHost(),
+      'port' => $server->getPort(),
+      'useSsl' => $server->useSsl(),
+      'username' => $server->getUsername(),
+      'password' => $server->getPassword(),
+      'bindRequiresDn' => $server->bindRequiresDn(),
+      'baseDn' => $server->getBaseDn(),
+      'accountCanonicalForm' => $server->getAccountCanonicalForm(),
+      'accountDomainName' => $server->getAccountDomainName(),
+      'accountDomainNameShort' => $server->getAccountDomainNameShort(),
+      'accountFilterFormat' => $server->getAccountFilterFormat(),
+      'allowEmptyPassword' => $server->allowEmptyPassword(),
+      'useStartTls' => $server->useStartTls(),
+      'optReferrals' => $server->useOptReferrals(),
+      'tryUsernameSplit' => $server->tryUsernameSplit(),
+      'networkTimeout' => $server->getNetworkTimeout(),
     ]);
-    return $this;
-  }
-
-  /**
-   * Bind user account.
-   *
-   * @param string $username
-   *   The username.
-   * @param string $password
-   *   The password.
-   *
-   * @return \Drupal\ldap\LdapClient
-   *   Return current object for chaining.
-   *
-   * @throws \Zend\Ldap\Exception\LdapException
-   */
-  public function bind($username = NULL, $password = NULL) {
-    parent::bind($username, $password);
     return $this;
   }
 
